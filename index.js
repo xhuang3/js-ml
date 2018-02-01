@@ -1,6 +1,6 @@
 import { forEach } from 'lodash';
 import csv from 'csvtojson';
-import { SLR } from 'ml-regression';
+import { SLR, PolynomialRegression } from 'ml-regression';
 import readline from 'readline';
 
 const csvfilepath = './advertising.csv';
@@ -10,7 +10,8 @@ let csvdata = [],
   Y = [];
 
 let regressionModel;
-
+let polyRegressionModel;
+const degree = 5;
 const f = s => {
   return parseFloat(s);
 };
@@ -44,6 +45,12 @@ const performRegression = () => {
   predictOutput();
 };
 
+const performPolyRegression = () => {
+  regressionModel = new PolynomialRegression(X, Y, degree);
+  console.log(regressionModel.toString(3));
+  predictOutput();
+};
+
 csv()
   .fromFile(csvfilepath)
   .on('json', jsonObj => {
@@ -51,5 +58,6 @@ csv()
   })
   .on('done', () => {
     dressData();
-    performRegression();
+    //performRegression();
+    performPolyRegression();
   });
